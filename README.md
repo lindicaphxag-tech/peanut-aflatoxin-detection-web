@@ -1,5 +1,7 @@
 # Peanut Mold Screening Web
 
+![CI](https://github.com/lindicaphxag-tech/peanut-aflatoxin-detection-web/actions/workflows/ci.yml/badge.svg)
+
 A React + TypeScript frontend for an image-based peanut mold screening prototype.
 
 The application lets a user upload an image, sends it to the companion inference API, visualizes the 3-class probability distribution, and stores recent screening history locally in the browser.
@@ -12,7 +14,7 @@ The application lets a user upload an image, sends it to the companion inference
 - Three-class result display: normal / moldy without visible fuzz / moldy with visible fuzz.
 - Per-class probability visualization.
 - Detection statistics.
-- Local history stored in `localStorage` (up to 50 recent records).
+- Local history stored in `localStorage` (up to 50 recent records) with compressed persistent thumbnails.
 - History filtering, detail view, and deletion.
 - Responsive animated UI.
 
@@ -82,7 +84,7 @@ npm run preview
 
 ## Data handling
 
-Detection history is stored in browser `localStorage`. The current implementation keeps up to 50 recent records. Clearing browser storage removes that history.
+Detection history is stored in browser `localStorage`. The current implementation keeps up to 50 recent records and stores a small JPEG data-URL thumbnail rather than a session-only `blob:` URL, so history images remain available after a page reload. Clearing browser storage removes that history.
 
 ## Limitations
 
