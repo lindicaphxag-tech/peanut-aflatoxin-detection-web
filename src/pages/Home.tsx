@@ -108,7 +108,7 @@ function Home() {
             whileHover={{ scale: 1.05, y: -2 }}
             className="glass rounded-2xl p-3 text-center card-shadow"
           >
-            <div className={`w-10 h-10 mx-auto mb-2 rounded-xl bg-gradient-to-br ${item.color}flex items-center justify-center shadow`}>
+            <div className={`w-10 h-10 mx-auto mb-2 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow`}>
               <span className="text-lg">{item.emoji}</span>
             </div>
             <p className="text-xl font-bold text-gray-800">{item.value}</p>
@@ -133,7 +133,7 @@ function Home() {
               animate={{ scale: 1, opacity: 1 }}
               className="relative"
             >
-              <img src={image}alt="预览" className="max-h-56 mx-auto rounded-xl shadow-lg" />
+              <img src={image} alt="预览" className="max-h-56 mx-auto rounded-xl shadow-lg" />
               <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors rounded-xl flex items-center justify-center">
                 <span className="opacity-0 hover:opacity-100 text-white text-sm bg-black/50 px-3 py-1 rounded-full">点击更换</span>
               </div>
@@ -202,7 +202,7 @@ function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -30 }}
-            className={`${getResultConfig(result.class_index).bgClass}rounded-3xl p-5 card-shadow overflow-hidden`}
+            className={`${getResultConfig(result.class_index).bgClass} rounded-3xl p-5 card-shadow overflow-hidden`}
           >
             {/* 结果头部 */}
             <div className="flex items-center gap-4 mb-5">
@@ -245,7 +245,7 @@ function Home() {
                       initial={{ width: 0 }}
                       animate={{ width: `${item.prob}%` }}
                       transition={{ duration: 0.8, delay: idx * 0.1 }}
-                      className={`h-full bg-gradient-to-r ${item.color}rounded-full relative`}
+                      className={`h-full bg-gradient-to-r ${item.color} rounded-full relative`}
                     >
                       <div className="absolute inset-0 progress-bar"></div>
                     </motion.div>
