@@ -65,7 +65,7 @@ function History() {
             <span className="font-bold text-primary-800">检测统计</span>
           </div>
           {history.length > 0 && (
-            <motion.button whileHover={{ scale: 1.05 }}whileTap={{ scale: 0.95 }} onClick={clearHistory}
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={clearHistory}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-xs font-medium hover:bg-red-100">
               <span>🗑️</span> 清空全部
             </motion.button>
@@ -78,7 +78,7 @@ function History() {
             { label: '轻度', value: stats.warning, emoji: '⚠️', active: filter === 1, filterVal: 1 },
             { label: '重度', value: stats.danger, emoji: '❌', active: filter === 2, filterVal: 2 },
           ].map((item, idx) => (
-            <motion.button key={idx}whileHover={{ scale: 1.05 }}whileTap={{ scale: 0.95 }}
+            <motion.button key={idx} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
               onClick={() => setFilter(filter === item.filterVal ? null : item.filterVal)}
               className={`p-2 rounded-xl text-center transition-all ${item.active ? 'bg-primary-100 ring-2 ring-primary-300' : 'bg-white/50 hover:bg-white/80'}`}>
               <span className="text-lg">{item.emoji}</span>
@@ -111,9 +111,9 @@ function History() {
       ) : (
         <div className="space-y-3">
           {filteredHistory.map((item, index) => (
-            <motion.div key={index} initial={{ opacity: 0, x: -20 }}animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.03 }}
-              whileHover={{ scale: 1.02, x: 5 }}onClick={() => setSelectedItem(item)}
-              className={`${getStatusConfig(item.class_index).bg}rounded-2xl p-4 card-shadow cursor-pointer`}>
+            <motion.div key={index} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.03 }}
+              whileHover={{ scale: 1.02, x: 5 }} onClick={() => setSelectedItem(item)}
+              className={`${getStatusConfig(item.class_index).bg} rounded-2xl p-4 card-shadow cursor-pointer`}>
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <img src={item.image} alt="检测图片" className="w-16 h-16 object-cover rounded-xl shadow-md" />
@@ -128,7 +128,7 @@ function History() {
                   </div>
                   <p className="text-xs text-gray-400 mt-1.5 flex items-center gap-1"><span>🕐</span> {item.time}</p>
                 </div>
-                <motion.button whileHover={{ scale: 1.2 }}whileTap={{ scale: 0.9 }}onClick={(e) => deleteItem(index, e)}
+                <motion.button whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} onClick={(e) => deleteItem(index, e)}
                   className="w-8 h-8 flex items-center justify-center bg-white/60 hover:bg-red-100 rounded-full text-gray-400 hover:text-red-500">🗑️</motion.button>
               </div>
             </motion.div>
@@ -141,7 +141,7 @@ function History() {
         {selectedItem && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setSelectedItem(null)}>
-            <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }}exit={{ scale: 0.9, y: 20 }}
+            <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()} className="bg-white rounded-3xl p-5 max-w-sm w-full max-h-[85vh] overflow-y-auto card-shadow">
               <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-2"><span className="text-xl">📄</span><h3 className="text-lg font-bold text-gray-800">检测详情</h3></div>
@@ -155,7 +155,7 @@ function History() {
                   <span className={getStatusConfig(selectedItem.class_index).color}>{selectedItem.result}</span>
                 </div>
               </div>
-              <div className={`${getStatusConfig(selectedItem.class_index).bg}rounded-2xl p-4 mb-4`}>
+              <div className={`${getStatusConfig(selectedItem.class_index).bg} rounded-2xl p-4 mb-4`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-white/80 rounded-xl flex items-center justify-center shadow">
@@ -184,7 +184,7 @@ function History() {
                     <div className="flex-1">
                       <div className="flex justify-between text-xs mb-1"><span className="text-gray-600">{item.label}</span><span className="font-medium">{item.prob}%</span></div>
                       <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <motion.div initial={{ width: 0 }} animate={{ width: `${item.prob}%` }} transition={{ duration: 0.5, delay: idx * 0.1 }} className={`h-full ${item.color}rounded-full`}/>
+                        <motion.div initial={{ width: 0 }} animate={{ width: `${item.prob}%` }} transition={{ duration: 0.5, delay: idx * 0.1 }} className={`h-full ${item.color} rounded-full`}/>
                       </div>
                     </div>
                   </div>
