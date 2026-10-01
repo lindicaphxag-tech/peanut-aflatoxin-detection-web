@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence }from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface HistoryItem {
   result: string
@@ -12,16 +12,44 @@ interface HistoryItem {
   time: string
 }
 
+
+const loadHistory = (): HistoryItem[] => {
+  try {
+    const parsed = JSON.parse(localStorage.getItem('detection_history') || '[]')
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
+function HistoryImage({ src, className }: { src: string; className: string }) {
+  const [failed, setFailed] = useState(false)
+
+  if (!src || failed) {
+    return (
+      <div className={`${className} bg-primary-50 flex items-center justify-center`}>
+        <span className="text-2xl">🥜</span>
+      </div>
+    )
+  }
+
+  return (
+    <img
+      src={src}
+      alt="检测图片"
+      className={className}
+      onError={() => setFailed(true)}
+    />
+  )
+}
+
 function History() {
   const [history, setHistory] = useState<HistoryItem[]>([])
   const [selectedItem, setSelectedItem] = useState<HistoryItem | null>(null)
   const [filter, setFilter] = useState<number | null>(null)
 
   useEffect(() => {
-    const saved = localStorage.getItem('detection_history')
-    if (saved) {
-      setHistory(JSON.parse(saved))
-    }
+    setHistory(loadHistory())
   }, [])
 
   const clearHistory = () => {
@@ -116,7 +144,7 @@ function History() {
               className={`${getStatusConfig(item.class_index).bg} rounded-2xl p-4 card-shadow cursor-pointer`}>
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <img src={item.image} alt="检测图片" className="w-16 h-16 object-cover rounded-xl shadow-md" />
+                  <HistoryImage src={item.image} className="w-16 h-16 object-cover rounded-xl shadow-md" />
                   <div className="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow text-sm">
                     {getStatusConfig(item.class_index).emoji}
                   </div>
@@ -149,7 +177,7 @@ function History() {
                   className="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full text-gray-500">✕</motion.button>
               </div>
               <div className="relative rounded-2xl overflow-hidden mb-4 shadow-lg">
-                <img src={selectedItem.image} alt="检测图片" className="w-full" />
+                <HistoryImage src={selectedItem.image} className="w-full min-h-48 object-contain bg-gray-50" />
                 <div className="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
                   {getStatusConfig(selectedItem.class_index).emoji}
                   <span className={getStatusConfig(selectedItem.class_index).color}>{selectedItem.result}</span>
