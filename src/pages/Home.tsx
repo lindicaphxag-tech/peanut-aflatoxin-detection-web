@@ -20,6 +20,15 @@ interface StatsData {
 }
 
 
+const loadHistory = (): any[] => {
+  try {
+    const parsed = JSON.parse(localStorage.getItem('detection_history') || '[]')
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
 const createHistoryThumbnail = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -64,7 +73,7 @@ function Home() {
 
   // 加载统计数据
   useEffect(() => {
-    const history = JSON.parse(localStorage.getItem('detection_history') || '[]')
+    const history = loadHistory()
     const statsData = {
       total: history.length,
       normal: history.filter((h: any) => h.class_index === 0).length,
@@ -113,7 +122,7 @@ function Home() {
         console.warn('历史缩略图生成失败:', thumbnailError)
       }
 
-      const history = JSON.parse(localStorage.getItem('detection_history') || '[]')
+      const history = loadHistory()
       history.unshift({
         ...response.data,
         image: historyImage,
