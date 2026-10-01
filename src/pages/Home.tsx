@@ -19,6 +19,41 @@ interface StatsData {
   danger: number
 }
 
+
+const createHistoryThumbnail = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onerror = () => reject(reader.error ?? new Error('Failed to read image'))
+    reader.onload = () => {
+      const source = reader.result
+      if (typeof source !== 'string') {
+        reject(new Error('Unexpected image payload'))
+        return
+      }
+
+      const preview = new Image()
+      preview.onerror = () => reject(new Error('Failed to decode image'))
+      preview.onload = () => {
+        const maxSide = 240
+        const scale = Math.min(1, maxSide / Math.max(preview.width, preview.height))
+        const canvas = document.createElement('canvas')
+        canvas.width = Math.max(1, Math.round(preview.width * scale))
+        canvas.height = Math.max(1, Math.round(preview.height * scale))
+
+        const context = canvas.getContext('2d')
+        if (!context) {
+          reject(new Error('Canvas is unavailable'))
+          return
+        }
+
+        context.drawImage(preview, 0, 0, canvas.width, canvas.height)
+        resolve(canvas.toDataURL('image/jpeg', 0.68))
+      }
+      preview.src = source
+    }
+    reader.readAsDataURL(file)
+  })
+
 function Home() {
   const [image, setImage] = useState<string | null>(null)
   const [file, setFile] = useState<File | null>(null)
@@ -38,6 +73,15 @@ function Home() {
     }
     setStats(statsData)
   }, [result])
+
+
+  useEffect(() => {
+    return () => {
+      if (image?.startsWith('blob:')) {
+        URL.revokeObjectURL(image)
+      }
+    }
+  }, [image])
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
@@ -61,11 +105,18 @@ function Home() {
       })
       setResult(response.data)
 
-      // 保存到历史记录
+      // Persist a small data-URL thumbnail. Blob URLs only live for the current page session.
+      let historyImage = ''
+      try {
+        historyImage = await createHistoryThumbnail(file)
+      } catch (thumbnailError) {
+        console.warn('历史缩略图生成失败:', thumbnailError)
+      }
+
       const history = JSON.parse(localStorage.getItem('detection_history') || '[]')
       history.unshift({
         ...response.data,
-        image: image,
+        image: historyImage,
         time: new Date().toLocaleString('zh-CN')
       })
       localStorage.setItem('detection_history', JSON.stringify(history.slice(0, 50)))
